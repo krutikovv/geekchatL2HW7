@@ -137,7 +137,8 @@ public class Controller implements Initializable {
             connect();
         }
 
-        String msg = String.format("%s %s %s",Command.AUTH, loginField.getText().trim(), passwordField.getText().trim());
+        String msg = String.format("%s %s %s",Command.AUTH, loginField.getText().trim(),
+                passwordField.getText().trim());
 
         try {
             out.writeUTF(msg);
