@@ -1,5 +1,7 @@
 package server;
 
+import commands.Command;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -39,9 +41,25 @@ public class Server {
     }
 
     public void broadcastMsg(ClientHandler clientHandler, String msg){
+        String[] token = msg.split("\\s", 3);
         String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
-        for (ClientHandler c : clients) {
-            c.sendMsg(message);
+        if (token[0].equals(Command.SEND_ONE)){
+            if(token.length > 2){
+                String messagePrv = String.format("[ %s ]: %s", clientHandler.getNickname(), token[2]);
+                for (ClientHandler c : clients) {
+                    if(c.getNickname().equals(token[1])) {
+                        c.sendMsg(messagePrv);
+                        clientHandler.sendMsg(messagePrv);
+                        break;
+                    }
+                }
+            } else {
+                System.out.println("Error syntax of command");
+            }
+        } else {
+            for (ClientHandler c : clients) {
+                c.sendMsg(message);
+            }
         }
     }
 
